@@ -10,4 +10,4 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 
 sudo chkconfig docker on
-sudo service docker start 
+sudo service docker start
