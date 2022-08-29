@@ -29,7 +29,7 @@ USER jenkins
 
 2. Após criar o arquivo, realizar o build da imagem via shell: `docker build -t jenkins-server-image .`;
 3. Subir o container com a nova imagem via shell: `docker run -d -p 80:8080 --name jenkins-pod jenkins-server-image`;
-4. Acessar o Elastic IP da instância que saiu no output do Terraform (ex: `http://44.206.118.193/`);
+4. Acessar o Elastic IP da instância que saiu no output do Terraform (ex: `http://44.206.118.193`);
 5. Recuperar a senha do Jenkins executando o comando via shell: `docker exec -ti jenkins-pod cat /var/jenkins_home/secrets/initialAdminPassword`;
 6. Configurar o Jenkins e criar um job do tipo pipeline com o nome `Catapimba Infrastructure`, marcar a opção para habilitar o GitHub Webhooks e utilizar o script:
 

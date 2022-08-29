@@ -5,6 +5,13 @@ data "aws_vpc" "catapimba_vpc" {
   }
 }
 
+data "aws_subnet" "catapimba_public_subnet" {
+  filter {
+    name   = "cidr-block"
+    values = ["10.0.101.0/24"]
+  }
+}
+
 data "aws_ami" "amazon_linux" {
   most_recent = true
 
