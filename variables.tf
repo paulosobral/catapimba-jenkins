@@ -1,3 +1,13 @@
+# Security Group Module:
+
+variable "vpc_name" {
+  type = list(string)
+}
+
+variable "vpc_public_subnet" {
+  type = list(string)
+}
+
 variable "ingress_cidr_blocks" {
   type = list(string)
 }
@@ -7,6 +17,16 @@ variable "ingress_rules" {
 }
 
 variable "egress_rules" {
+  type = list(string)
+}
+
+# Instance Module:
+
+variable "ami_name" {
+  type = list(string)
+}
+
+variable "ami_owner" {
   type = list(string)
 }
 
