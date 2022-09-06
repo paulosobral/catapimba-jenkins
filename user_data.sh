@@ -5,7 +5,7 @@ sudo yum update -y
 sudo yum install yum-utils docker -y
 sudo usermod -aG docker ec2-user
 
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/${docker_compose_instance_version}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &&
 sudo chmod +x /usr/local/bin/docker-compose &&
 sudo chkconfig docker on &&
 sudo service docker start &&
@@ -18,10 +18,10 @@ cat <<EOF > Dockerfile
  RUN apt-get update && apt-get install wget -y
 
  ### Install Terraform ###
- RUN wget --quiet https://releases.hashicorp.com/terraform/1.0.9/terraform_1.0.9_linux_amd64.zip \
- && unzip terraform_1.0.9_linux_amd64.zip \
+ RUN wget --quiet https://releases.hashicorp.com/terraform/${terraform_jenkins_version}/terraform_${terraform_jenkins_version}_linux_amd64.zip \
+ && unzip terraform_${terraform_jenkins_version}_linux_amd64.zip \
  && mv terraform /usr/bin \
- && rm terraform_1.0.9_linux_amd64.zip
+ && rm terraform_${terraform_jenkins_version}_linux_amd64.zip
 
  USER jenkins
 EOF
@@ -29,6 +29,7 @@ EOF
 sudo docker build -t jenkins-server-image . &&
 sudo docker run -d -p 80:8080 --name jenkins-pod jenkins-server-image &&
 
+sleep 30
+
 # CREATE A SYSTEMS MANAGER PARAMETER WITH JENKINS ADMIN PASSWORD:
-JENKINS_PASSWORD=$(sudo docker exec -ti jenkins-pod cat /var/jenkins_home/secrets/initialAdminPassword)
-aws ssm put-parameter --region us-east-1 --name "JenkinsinitialAdminPassword" --value "$JENKINS_PASSWORD" --type String --overwrite
+aws ssm put-parameter --region us-east-1 --name "JenkinsinitialAdminPassword" --value "$(sudo docker exec jenkins-pod cat /var/jenkins_home/secrets/initialAdminPassword)" --type String --overwrite

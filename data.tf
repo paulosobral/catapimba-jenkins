@@ -31,3 +31,11 @@ data "aws_ami" "amazon_linux" {
 
   owners = var.ami_owner
 }
+
+data "template_file" "user_data_file" {
+  template = file("${path.module}/user_data.sh")
+  vars = {
+    docker_compose_instance_version = "${var.docker_compose_instance_version}"
+    terraform_jenkins_version       = "${var.terraform_jenkins_version}"
+  }
+}

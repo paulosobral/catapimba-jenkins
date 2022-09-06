@@ -23,7 +23,7 @@ module "jenkins_ec2_instance" {
   vpc_security_group_ids = [module.jenkins_sg.security_group_id]
   subnet_id              = data.aws_subnet.catapimba_public_subnet.id
   iam_instance_profile   = var.iam_instance_profile
-  user_data              = file("./user_data.sh")
+  user_data              = data.template_file.user_data_file.rendered
 
   tags = {
     Terraform = "true"
